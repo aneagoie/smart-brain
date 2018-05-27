@@ -9,6 +9,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import './App.css';
 
+// background graphics of application
 const particlesOptions = {
   particles: {
     number: {
@@ -42,6 +43,7 @@ class App extends Component {
     this.state = initialState;
   }
 
+  // accepts input then be declared on app state
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
@@ -52,6 +54,7 @@ class App extends Component {
     }})
   }
 
+  // calculate four dots sorrounding the square and returns it
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
@@ -65,17 +68,23 @@ class App extends Component {
     }
   }
 
+  // MUST accepts return function from calculateFaceLocation
+  // set state from return calculateFaceLocation
   displayFaceBox = (box) => {
     this.setState({box: box});
   }
 
+  // function changes input state from input url image
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
 
+  // submit the image from input state (URL)
+  // submit button when logged in (POST)
+  // add 1 to rank of user profile (PUT)
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
-      fetch('http://localhost:3000/imageurl', {
+      fetch('http://localhost/imageurl', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -85,25 +94,25 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:3000/image', {
+          fetch('http://localhost/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
               id: this.state.user.id
             })
           })
-            .then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
-            })
-            .catch(console.log)
-
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count}))
+          })
+          .catch(console.log)
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
   }
 
+  // route management
   onRouteChange = (route) => {
     if (route === 'signout') {
       this.setState(initialState)

@@ -9,16 +9,20 @@ class Signin extends React.Component {
     }
   }
 
+  // change email state from input to setstate
   onEmailChange = (event) => {
     this.setState({signInEmail: event.target.value})
   }
 
+  // change password(not hashed) state from input to setstate
   onPasswordChange = (event) => {
     this.setState({signInPassword: event.target.value})
   }
 
+  //verify if info input is === info from database if match then replace app state with response data from server
   onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
+    // change the 'http://localhost/' link based on your url from heroku
+    fetch('http://localhost/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
