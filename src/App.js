@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Clarifai from 'clarifai';
+
+import Upload from './components/Upload/Upload';
+import Image from './components/Image/Image';
 import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import Choice from './components/Choice/Choice';
+
 import './App.css';
+
+const clarifai = new Clarifai.App({
+  apiKey: 'd7945fe573cd4ee99bc0e166d68ae7ff'
+ });
 
 // background graphics of application
 const particlesOptions = {
@@ -23,10 +31,9 @@ const particlesOptions = {
 }
 
 const initialState = {
-  input: '',
-  imageUrl: '',
-  box: {},
-  route: 'signin',
+  choice: null,
+  imageUrl: null,
+  route: 'home',
   isSignedIn: false,
   user: {
     id: '',
@@ -54,63 +61,34 @@ class App extends Component {
     }})
   }
 
-  // calculate four dots sorrounding the square and returns it
-  calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById('inputimage');
-    const width = Number(image.width);
-    const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
+  CapturePhoto = async (image) => {
+    let prototypeUrl;
+
+    // const prototypeUrl;
+    if(this.state.choice === "upload" && (image[0].type === "image/jpg" || image[0].type === "image/png")){
+      prototypeUrl = (image[0].base64).slice(22);
+    }else if (this.state.choice === "upload"){
+      prototypeUrl = (image[0].base64).slice(23);
+    } else {
+      prototypeUrl = image.slice(23);
     }
+
+    await this.setState({imageUrl: prototypeUrl});
+    this.onButtonSubmit();
   }
 
-  // MUST accepts return function from calculateFaceLocation
-  // set state from return calculateFaceLocation
-  displayFaceBox = (box) => {
-    this.setState({box: box});
-  }
 
-  // function changes input state from input url image
-  onInputChange = (event) => {
-    this.setState({input: event.target.value});
-  }
 
   // submit the image from input state (URL)
   // submit button when logged in (POST)
   // add 1 to rank of user profile (PUT)
-  onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input});
-      fetch('http://localhost/imageurl', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          input: this.state.input
-        })
-      })
-      .then(response => response.json())
-      .then(response => {
-        if (response) {
-          fetch('http://localhost/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
-          })
-          .then(response => response.json())
-          .then(count => {
-            this.setState(Object.assign(this.state.user, { entries: count}))
-          })
-          .catch(console.log)
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      })
-      .catch(err => console.log(err));
-  }
+  onButtonSubmit = () => {   
+    clarifai.models.predict(Clarifai.FOOD_MODEL, {base64: this.state.imageUrl})
+    .then((data) => {
+      console.log(data);
+    })
+    .catch(err => console.log(err));
+  } 
 
   // route management
   onRouteChange = (route) => {
@@ -122,8 +100,13 @@ class App extends Component {
     this.setState({route: route});
   }
 
+  //Change the choice of image upload or take picture
+  onChoiceChange = (buttonchoice) => {
+    this.setState({choice: buttonchoice});
+  }
+
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, choice } = this.state;
     return (
       <div className="App">
          <Particles className='particles'
@@ -137,11 +120,14 @@ class App extends Component {
                 name={this.state.user.name}
                 entries={this.state.user.entries}
               />
-              <ImageLinkForm
-                onInputChange={this.onInputChange}
-                onButtonSubmit={this.onButtonSubmit}
-              />
-              <FaceRecognition box={box} imageUrl={imageUrl} />
+              {
+                choice === 'picture'
+                  ? <Image CapturePhoto={this.CapturePhoto} onChoiceChange={this.onChoiceChange}></Image>  
+                  : choice === 'upload'
+                    ? <Upload CapturePhoto={this.CapturePhoto} onChoiceChange={this.onChoiceChange}></Upload>
+                    : <Choice onChoiceChange={this.onChoiceChange}></Choice>
+              }
+                       
             </div>
           : (
              route === 'signin'
