@@ -10,20 +10,25 @@ class Register extends React.Component {
     }
   }
 
+  // change name state from input to setstate
   onNameChange = (event) => {
     this.setState({name: event.target.value})
   }
 
+  // change email state from input to setstate
   onEmailChange = (event) => {
     this.setState({email: event.target.value})
   }
 
+  // change password(not hashed) state from input to setstate
   onPasswordChange = (event) => {
     this.setState({password: event.target.value})
   }
 
-  onSubmitSignIn = () => {
-    fetch('http://localhost:3000/register', {
+  // input data registered into database then redirect to home page (already logged in)
+  onSubmitRegister = () => {
+    // change the 'http://localhost/' link based on your url from heroku
+    fetch('http://localhost/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -81,7 +86,7 @@ class Register extends React.Component {
             </fieldset>
             <div className="">
               <input
-                onClick={this.onSubmitSignIn}
+                onClick={this.onSubmitRegister}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Register"
