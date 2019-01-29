@@ -1,4 +1,5 @@
 import React from 'react';
+import '../Signin/Signin.css';
 
 class Register extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Register extends React.Component {
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
                 <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 hover-black"
                   type="text"
                   name="name"
                   id="name"
@@ -61,7 +62,7 @@ class Register extends React.Component {
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
                 <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 hover-black"
                   type="email"
                   name="email-address"
                   id="email-address"
@@ -71,7 +72,7 @@ class Register extends React.Component {
               <div className="mv3">
                 <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
                 <input
-                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 hover-black"
                   type="password"
                   name="password"
                   id="password"
