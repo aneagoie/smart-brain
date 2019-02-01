@@ -89,6 +89,8 @@ class App extends Component {
       name: data.name,
       email: data.email,
       entries: data.entries,
+      age: data.age,
+      pet: data.pet,
       joined: data.joined
     }})
   }
