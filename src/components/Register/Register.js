@@ -5,41 +5,69 @@ class Register extends React.Component {
     this.state = {
       email: '',
       password: '',
-      name: ''
+      name: '',
+      age: ''
     }
   }
 
   onNameChange = (event) => {
-    this.setState({name: event.target.value})
+    this.setState({name: event.target.value});
   }
 
   onEmailChange = (event) => {
-    this.setState({email: event.target.value})
+    this.setState({email: event.target.value});
   }
 
   onPasswordChange = (event) => {
-    this.setState({password: event.target.value})
+    this.setState({password: event.target.value});
+  }
+
+  onAgeChange = (event) => {
+    this.setState({age: event.target.value});
+  }
+
+  saveAuthTokenInSession = token => {
+    window.sessionStorage.setItem('token', token);
   }
 
   onSubmitSignIn = () => {
-    console.log(process.env.REACT_APP_SERVER_PORT);
     fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/register`, {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,
-        name: this.state.name
+        name: this.state.name,
+        age: this.state.age
       })
     })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          this.props.loadUser(user)
-          this.props.onRouteChange('home');
-        }
+      .then(response => {
+        console.log(response)
+        return response.json()
       })
-  }
+      .then( data => {
+        if (data.success === 'true') {
+          console.log(data);
+          this.saveAuthTokenInSession(data.token);
+          fetch(`http://localhost:3001/profile/${data.userId}`,{
+            method: 'get',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': data.token
+            }
+          })
+            .then(resp => resp.json())
+            .then(user => {
+              if (user) {
+                console.log(user);
+                this.props.loadUser(user)
+                this.props.onRouteChange('home');
+              }
+            })
+            .catch(console.log);
+        }
+      });
+  };
 
   render() {
     return (
@@ -66,6 +94,16 @@ class Register extends React.Component {
                   name="email-address"
                   id="email-address"
                   onChange={this.onEmailChange}
+                />
+              </div>
+              <div className="mt3">
+                <label className="db fw6 lh-copy f6" htmlFor="age">Age</label>
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  type="text"
+                  name="age"
+                  id="age"
+                  onChange={this.onAgeChange}
                 />
               </div>
               <div className="mv3">
