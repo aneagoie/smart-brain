@@ -70,7 +70,7 @@ class App extends Component {
             })
               .then(resp => resp.json())
               .then(user => {
-                if ( user && user.email) {
+                if (user && user.email) {
                   this.loadUser(user);
                   this.onRouteChange('home');
                 }
@@ -210,8 +210,8 @@ class App extends Component {
             <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
           </div>
         ) : route === "signin"
-        ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-        : <Register
+            ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+            : <Register
               loadUser={this.loadUser}
               onRouteChange={this.onRouteChange} />
         }

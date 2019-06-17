@@ -26,6 +26,10 @@ class ProfileIcon extends React.Component {
     this.props.onRouteChange('signout');
   }
 
+  onChangeIcon = imageUrl => {
+    fetch(``)
+  }
+
   render() {
     return (
       <div className="pa4 tc">
