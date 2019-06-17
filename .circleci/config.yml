@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run: echo "npm installing"
+      - run: npm install
+      - run: CI=true npm run build
+workflows:
+  version: 2
+  build_lint:
+    jobs:
+      - build
