@@ -139,7 +139,8 @@ class App extends Component {
         if (response) {
           fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/image`, {
             method: "put",
-            headers: {
+headers: 
+    {
               "Content-Type": "application/json",
               'Authorization': window.sessionStorage.getItem('token')
             },
@@ -164,18 +165,25 @@ class App extends Component {
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
     }
-    this.setState({ route: route });
+            this.setState({ route: route });
   };
 
   toggleModal = () => {
     this.setState(prevState => ({
+      
+      
       ...prevState,
       isProfileOpen: !prevState.isProfileOpen
     }));
   };
 
   render() {
-    const { isSignedIn, imageUrl, route, boxes, isProfileOpen, user, profileIconUrl } = this.state;
+    const { isSignedIn, 
+          imageUrl,
+     route, boxes,
+     
+     
+     isProfileOpen, user, profileIconUrl } = this.state;
     return (
       <div className="App">
         <Particles className="particles" params={particlesOptions} />
