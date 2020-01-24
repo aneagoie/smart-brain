@@ -1,4 +1,7 @@
 .dropdown-menu {
   float: none !important;
-  position: relative !important;
+}
+
+.dropdown {
+  margin-right: 75px;
 }
