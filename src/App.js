@@ -181,7 +181,6 @@ class App extends Component {
       imageUrl,
       route,
       boxes,
-
       isProfileOpen,
       user,
       profileIconUrl
