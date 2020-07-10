@@ -19,13 +19,13 @@ const particlesOptions = {
       }
     }
   }
-}
+};
 
 const initialState = {
   input: '',
   imageUrl: '',
   box: {},
-  route: 'signin',
+  route: 'home',
   isSignedIn: false,
   user: {
     id: '',
@@ -34,7 +34,7 @@ const initialState = {
     entries: 0,
     joined: ''
   }
-}
+};
 
 class App extends Component {
   constructor() {
@@ -111,7 +111,7 @@ class App extends Component {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
-  }
+  };
 
   render() {
     const { isSignedIn, imageUrl, route, box } = this.state;
