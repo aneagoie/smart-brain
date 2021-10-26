@@ -5,7 +5,7 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-particles-js": "^3.5.3",
+    "react-particles-js": "^2.1.0",
     "react-scripts": "^4.0.3",
     "react-tilt": "^0.1.4",
     "tachyons": "^4.12.0"
