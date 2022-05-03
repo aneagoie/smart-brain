@@ -48,6 +48,40 @@ class App extends Component {
     this.state = initialState;
   }
 
+  componentDidMount() {
+    const token = window.sessionStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:3000/signin", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (data?.id) {
+            fetch(`http://localhost:3000/profile/${data.id}`, {
+              method: "get",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+              },
+            })
+              .then((resp) => resp.json())
+              .then((user) => {
+                if (user && user.email) {
+                  this.loadUser(user);
+                  this.onRouteChange("home");
+                }
+              })
+              .catch(console.log);
+          }
+        })
+        .catch(console.log);
+    }
+  }
+
   loadUser = (data) => {
     this.setState({
       user: {
@@ -61,6 +95,7 @@ class App extends Component {
   };
 
   calculateFaceLocation = (data) => {
+    if (!data.outputs) return;
     const clarifaiFaces = data.outputs[0].data.regions;
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
@@ -78,6 +113,7 @@ class App extends Component {
   };
 
   displayFaceBox = (boxes) => {
+    if (!boxes) return;
     this.setState({ boxes: boxes });
   };
 
@@ -87,9 +123,10 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
+    const token = window.sessionStorage.getItem("token");
     fetch("http://localhost:3000/imageurl", {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Authorization: token },
       body: JSON.stringify({
         input: this.state.input,
       }),
@@ -99,7 +136,10 @@ class App extends Component {
         if (response) {
           fetch("http://localhost:3000/image", {
             method: "put",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
             body: JSON.stringify({
               id: this.state.user.id,
             }),
