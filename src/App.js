@@ -7,8 +7,11 @@ import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import Modal from './components/Modal/Modal';
+import Profile from './components/Profile/Profile';
+
 import './App.css';
- 
+
 const particlesOptions = {
   //customize this to your liking
   particles: {
@@ -25,9 +28,10 @@ const particlesOptions = {
 const initialState = {
   input: '',
   imageUrl: '',
-  box: {},
+  boxes: [],
   route: 'signin',
-  isSignedIn: false,
+  isSignedIn: true,
+  isProfileOpen: false,
   user: {
     id: '',
     name: '',
@@ -54,20 +58,45 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
+    return data.outputs[0].data.regions.map((region)=>{
+        const clarifaiFace = region.region_info.bounding_box;
+        return{
+          leftCol: clarifaiFace.left_col * width,
+          topRow: clarifaiFace.top_row * height,
+          rightCol: width - (clarifaiFace.right_col * width),
+          bottomRow: height - (clarifaiFace.bottom_row * height)
+        }
+      })
+      
+      // region.region_info.bounding_box;
+      // const image = document.getElementById('inputimage');
+      // const width = Number(image.width);
+      // const height = Number(image.height);
+      // boxesResult.push({
+      //   leftCol: clarifaiFace.left_col * width,
+      //   topRow: clarifaiFace.top_row * height,
+      //   rightCol: width - (clarifaiFace.right_col * width),
+      //   bottomRow: height - (clarifaiFace.bottom_row * height)
+      // })
+    
+    // return boxesResult;
+    // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    // const image = document.getElementById('inputimage');
+    // const width = Number(image.width);
+    // const height = Number(image.height);
+    // return {
+    //   leftCol: clarifaiFace.left_col * width,
+    //   topRow: clarifaiFace.top_row * height,
+    //   rightCol: width - (clarifaiFace.right_col * width),
+    //   bottomRow: height - (clarifaiFace.bottom_row * height)
+    // }
   }
 
-  displayFaceBox = (box) => {
-    this.setState({box: box});
+  displayFaceBox = (boxes) => {
+    this.setState({boxes:boxes});
   }
 
   onInputChange = (event) => {
@@ -107,21 +136,34 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState(initialState)
+      return this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
   }
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen
+    }))
+  }
+
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, boxes, isProfileOpen } = this.state;
     return (
       <div className="App">
-         <Particles className='particles'
+          <Particles className='particles'
           params={particlesOptions}
         />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}
+        toggleModal={this.toggleModal}
+        />
+        {isProfileOpen &&
+          <Modal>
+            <Profile isProfileOpen={isProfileOpen} toggleModal={this.toggleModal}/>
+          </Modal>}
         { route === 'home'
           ? <div>
               <Logo />
@@ -133,12 +175,12 @@ class App extends Component {
                 onInputChange={this.onInputChange}
                 onButtonSubmit={this.onButtonSubmit}
               />
-              <FaceRecognition box={box} imageUrl={imageUrl} />
+              <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
             </div>
           : (
-             route === 'signin'
-             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-             : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+              route === 'signin'
+              ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )
         }
       </div>
