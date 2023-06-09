@@ -79,7 +79,7 @@ class App extends React.Component {
     .then(response => response.json())
     .then(response => {
         if (response) {
-          fetch('https://backend-face-recog.onrender.com/image' {
+          fetch('https://backend-face-recog.onrender.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
