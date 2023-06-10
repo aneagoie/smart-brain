@@ -11,7 +11,7 @@ import Rank from './components/Rank/Rank';
 
 const initialState = { 
   input:'',
-  imageUrl: '',
+  imageurl: '',
   box: {},
   route: 'signin',
   isSignedIn: false,
@@ -69,7 +69,7 @@ class App extends React.Component {
 
   onButtonSubmit = () => {
     
-    this.setState({imageUrl: this.state.input});
+    this.setState({imageurl: this.state.input});
         fetch('https://backend-face-recog.onrender.com/imageurl', {
           method: 'post',
           headers: {'Content-Type': 'application/json'},
@@ -108,7 +108,7 @@ class App extends React.Component {
 
 
   render() { 
-    const { isSignedIn, imageUrl, route, box} = this.state;
+    const { isSignedIn, imageurl, route, box} = this.state;
       return (
         <div className="App">
           <ParticlesBg type="square" bg={true} />
@@ -121,7 +121,7 @@ class App extends React.Component {
             onInputChange={this.onInputChange} 
             onButtonSubmit={this.onButtonSubmit}
             />
-            <FaceRecognition box={box} imageUrl={imageUrl} />
+            <FaceRecognition box={box} imageurl={imageurl} />
           </div>
           : ( 
             route === 'Signin'
