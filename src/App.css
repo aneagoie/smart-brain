@@ -1,5 +1,11 @@
+body{
+  background-image: url("https://img.freepik.com/premium-vector/abstract-blue-background-with-modern-concept_191234-1066.jpg");
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+}
 .App {
   text-align: center;
+
 }
 
 .center {
@@ -14,4 +20,7 @@
   bottom: 0;
   left: 0;
   z-index: -1;
+}
+.black{
+  color:white;
 }

@@ -1,5 +1,5 @@
 {
-  "name": "facerecognitionbrain",
+  "name": "smartbrain",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,11 +10,18 @@
     "react-scripts": "^5.0.1",
     "tachyons": "^4.12.0"
   },
+   "devDependencies": {
+    "netlify-cli": "*"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+     "dev": "react-scripts start",
+    "start": "netlify dev",
+    "build": "mkdir -p dist && cp -R src/* dist/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+    "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -27,5 +34,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "Maria Corban",
+  "license": "ISC"
 }
+
