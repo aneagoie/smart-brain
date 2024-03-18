@@ -1,5 +1,5 @@
 {
-  "name": "facerecognitionbrain",
+  "name": "smartbrain",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,8 +12,8 @@
   },
   "scripts": {
      "dev": "react-scripts start",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "netlify dev",
+    "build": "mkdir -p dist && cp -R src/* dist/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
