@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import Particles from 'react-particles-js';
+// import Particles from 'react-particles-js'; 
 import ParticlesBg from 'particles-bg'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Navigation from './components/Navigation/Navigation';

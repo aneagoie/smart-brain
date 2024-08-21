@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "particles-bg": "^2.5.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-parallax-tilt": "^1.7.164",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-parallax-tilt": "^1.7.237",
     "react-scripts": "^5.0.1",
     "tachyons": "^4.12.0"
   },
